@@ -9,6 +9,7 @@ This repository contains a Dockerfile and instructions for creating a Docker ima
 - [Building the Docker Image](#building-the-docker-image)
 - [Running the Docker Container](#running-the-docker-container)
 - [Adding More Models](#adding-more-models)
+- [Interact with the API](#interact-with-the-API)
 
 ## Prerequisites
 Before you begin, make sure you have the following installed on your system:
@@ -21,39 +22,47 @@ Before you begin, make sure you have the following installed on your system:
 - The Dockerfile included in this repository specifies the environment and dependencies required to run the Flask application and serve the machine learning model. It uses a Python base image and installs the necessary packages from the `requirements.txt` file.
 
 ```dockerfile
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
+# Use a suitable base image
+# 'FROM' This Dockerfile command is used to set the base image for the subsequent instructions. Every valid Dockerfile must start with a FROM command. 
+# 'python:3.9-slim' This is the name and tag of the base image that you want to use. In this case, it refers to an official Python image hosted on Docker Hub.
+FROM python:3.9-slim
 
-# Set the working directory to /app
+# Set the working directory
+#'WORKDIR': This is the Dockerfile command that sets the working directory.
+#'/app': This is the path to the directory inside the container where you want subsequent commands to be executed. If the specified directory doesn't exist, Docker will create it.
+#the 'WORKDIR /app' instruction means that all the following instructions in the Dockerfile will be run inside the /app directory in the container.
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# This command use to copy the necessary files into the container
+# './': This is the destination path inside the image where the files will be copied. 
+# The . refers to the current working directory inside the container, which was previously set to /app by the WORKDIR instruction. So the files will be copied to the /app directory inside the image.
+COPY api.py churn_prediction_v1.pkl requirements.txt ./
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+# Install the required dependencies
+# '--no-cache-dir': This option tells pip not to store the build cache from the installation of the packages. Using this option can make the resulting image smaller because unnecessary cache files are not saved.
+#The -r option tells pip to install packages based on a requirements file. 
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+#'EXPOSE': This Dockerfile command is used to tell Docker that the container will have a service running on the specified port.
+# '5000': This is the port number that the container is expected to use for a specific service. In the context of a Flask application, it is common to run the app on port 5000.
+# Expose the API port
+EXPOSE 5000
 
-# Define environment variable
-ENV NAME World
-
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+# Run the API
+CMD ["python", "api.py"]
 ```
 
 ## Building the Docker image
 
 - Clone this repository to your local machine:
 ```
-git clone https://github.com/your-username/flask-ml-docker.git
+git clone https://github.com/your-username/ml-docker.git
 ```
 
 - Navigate to the project directory:
 
 ```
-cd flask-ml-docker
+cd ml-docker
 ```
 - Build the Docker image using the provided Dockerfile:
 
@@ -61,7 +70,7 @@ cd flask-ml-docker
 docker build -t flask-ml-app .
 ```
 
-This will create a Docker image named flask-ml-app.
+This will create a Docker image named "flask-ml-app"
 
 ## Running the Docker Container
 - After building the Docker image, you can run a container from it.
@@ -70,7 +79,7 @@ This will create a Docker image named flask-ml-app.
 docker run -p 8080:5000 flask-ml-app
 ```
 
-This command maps port 8080 on your host to port 5000 inside the container, where your application is running. You can access the Flask application by opening a web browser and navigating to http://localhost:8080.
+This command maps port 8080 on your host to port 5000 inside the container, where your application is running. Since the EXPOSE instruction in the Dockerfile indicated that the application inside the container will listen on port 5000, this mapping allows you to access the application by visiting http://localhost:8080 on the host machine.
 
 ## Adding More Models
 - To extend this pipeline with additional machine learning models, follow these steps:
@@ -85,3 +94,7 @@ This command maps port 8080 on your host to port 5000 inside the container, wher
 
 Now, you have a Docker container running a Flask application that serves multiple machine learning models through different API endpoints. You can access these endpoints by following the respective routes defined in your Flask application.
 
+## Interact with the API
+
+- With the docker container running you can send POST requests to http://localhost:8080/predict or anything similar to what you have mentioned in the flask code (api.py)
+- You can use Postman to send POST request along with the raw JSON that is required by the api.
