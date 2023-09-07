@@ -36,7 +36,7 @@ WORKDIR /app
 # This command use to copy the necessary files into the container
 # './': This is the destination path inside the image where the files will be copied. 
 # The . refers to the current working directory inside the container, which was previously set to /app by the WORKDIR instruction. So the files will be copied to the /app directory inside the image.
-COPY api.py churn_prediction_v1.pkl requirements.txt ./
+COPY api.py titanic_prediction_v1.pkl requirements.txt ./
 
 # Install the required dependencies
 # '--no-cache-dir': This option tells pip not to store the build cache from the installation of the packages. Using this option can make the resulting image smaller because unnecessary cache files are not saved.
