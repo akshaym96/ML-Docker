@@ -9,7 +9,7 @@ This repository contains a Dockerfile and instructions for creating a Docker ima
 - [Building the Docker Image](#building-the-docker-image)
 - [Running the Docker Container](#running-the-docker-container)
 - [Adding More Models](#adding-more-models)
-- [Interact with the API](#interact-with-the-API)
+- [Interact with the API](#interact-with-the-api)
 
 ## Prerequisites
 Before you begin, make sure you have the following installed on your system:
