@@ -86,9 +86,9 @@ This command maps port 8080 on your host to port 5000 inside the container, wher
 
     - Add your new model code and related files to the project directory.
 
-    - Modify the Flask application (app.py) to incorporate your new model and define the appropriate API endpoints.
+    - Modify the Flask application (`app.py`) to incorporate your new model and define the appropriate API endpoints.
 
-    - Update the requirements.txt file with any additional Python packages required for your new model.
+    - Update the `requirements.txt` file with any additional Python packages required for your new model.
 
     - Rebuild the Docker image as explained in the "Building the Docker Image" section.
 
@@ -96,5 +96,5 @@ Now, you have a Docker container running a Flask application that serves multipl
 
 ## Interact with the API
 
-- With the docker container running you can send POST requests to http://localhost:8080/predict or anything similar to what you have mentioned in the flask code (api.py)
+- With the docker container running you can send POST requests to http://localhost:8080/predict or anything similar to what you have mentioned in the flask code (`api.py`)
 - You can use Postman to send POST request along with the raw JSON that is required by the api.
